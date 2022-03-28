@@ -11,7 +11,6 @@ import {
   Link,
   Navigate,
 } from "react-router-dom";
-import { app } from "./firebase-config";
 import {
   getAuth,
   signInWithEmailAndPassword,
