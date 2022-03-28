@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import Form from "./components/Common/Form";
+import Form from "./components/common/Form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -61,10 +61,10 @@ function App() {
     }
   };
   useEffect(() => {
-    let authToken = sessionStorage.getItem('Auth Token')
+    let authToken = sessionStorage.getItem("Auth Token");
 
     if (authToken) {
-      navigate('/home')
+      navigate("/home");
     }
   }, []);
   return (
