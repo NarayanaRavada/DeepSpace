@@ -11,13 +11,12 @@ import {
   Link,
   Navigate,
 } from "react-router-dom";
-import { app } from "./firebase-config";
 import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import Home from "./Home";
+import Newpost from "./Newpost";
 import { Button } from "@mui/material";
 toast.configure();
 
@@ -72,7 +71,6 @@ function App() {
       <div className="App">
         <>
           <Routes>
-            <Route path="*" element={<Navigate to="/home" replace />} />
             <Route
               path="/login"
               element={
@@ -95,7 +93,9 @@ function App() {
                 />
               }
             />
-            <Route path="/home" element={<Home />} />
+            {/* <Route path="/home" element={<Home />} /> */}
+            <Route path="/newpost" element={<Newpost/>}/>
+            <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
         </>
       </div>
