@@ -1,6 +1,7 @@
 import { MenuSharp } from "@mui/icons-material";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import React from "react";
+import Profile from "../Profile";
 
 const Navbar = ({ handleLogout }) => {
   return (

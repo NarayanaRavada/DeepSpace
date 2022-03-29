@@ -5,13 +5,14 @@ import Button from "./Button";
 export default function BasicTextFields({
   title,
   setPassword,
+  setUsername,
   setEmail,
   handleAction,
 }) {
   return (
     <div>
       <div className="heading-container">
-        <h3>{title} Form</h3>
+        <h3>{title}</h3>
       </div>
 
       <Box
@@ -35,10 +36,17 @@ export default function BasicTextFields({
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
+        {title == "Register" && (
+          <TextField
+            id="username"
+            label="Username"
+            variant="outlined"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        )}
       </Box>
 
       <Button title={title} handleAction={handleAction} />
     </div>
   );
 }
-

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Form from "./components/Form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { db } from "./firebase-config";
 import {
   BrowserRouter as Router,
   Routes,
@@ -16,16 +18,16 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import Newpost from "./Newpost";
-import { Button } from "@mui/material";
 import Home from "./Home";
+import Profile from "./Profile";
 toast.configure();
 
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
-  const handleAction = (id) => {
+  const handleAction = async (id) => {
     const authentication = getAuth();
     if (id === 1) {
       signInWithEmailAndPassword(authentication, email, password)
@@ -33,8 +35,8 @@ function App() {
           sessionStorage.setItem(
             "Auth Token",
             response._tokenResponse.refreshToken
-            );
-            navigate("/home");
+          );
+          navigate("/home");
         })
         .catch((error) => {
           if (error.code === "auth/wrong-password") {
@@ -46,12 +48,21 @@ function App() {
         });
     } else if (id === 2) {
       createUserWithEmailAndPassword(authentication, email, password)
-        .then((response) => {
+        .then(async (response) => {
           sessionStorage.setItem(
             "Auth Token",
             response._tokenResponse.refreshToken
-            );
-            navigate("/home");
+          );
+          try {
+            await setDoc(doc(db, "users",email), {
+              username: username,
+              email: email,
+              Date: new Date(),
+            },{merge: true});
+          } catch (e) {
+            console.error("Error adding newprofile data", e);
+          }
+          navigate("/home");
         })
         .catch((error) => {
           if (error.code === "auth/email-already-in-use") {
@@ -60,13 +71,13 @@ function App() {
         });
     }
   };
-  useEffect(() => {
-    let authToken = sessionStorage.getItem("Auth Token");
+  // useEffect(() => {
+  //   let authToken = sessionStorage.getItem("Auth Token");
 
-    if (authToken) {
-      navigate("/home");
-    }
-  }, []);
+  //   if (!authToken) {
+  //     navigate("/login");
+  //   }
+  // }, []);
   return (
     <React.Fragment>
       <div className="App">
@@ -90,10 +101,12 @@ function App() {
                   title="Register"
                   setEmail={setEmail}
                   setPassword={setPassword}
+                  setUsername={setUsername}
                   handleAction={() => handleAction(2)}
                 />
               }
             />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/home" element={<Home />} />
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
