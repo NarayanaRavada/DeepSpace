@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { storage } from "../firebase-config";
+import { auth, storage, db } from "../firebase-config";
 import {
   Avatar,
   Box,
   Button,
   IconButton,
+  Input,
   TextField,
   Typography,
 } from "@mui/material";
@@ -16,22 +17,25 @@ import {
   uploadBytes,
   uploadBytesResumable,
 } from "firebase/storage";
+import { addDoc, collection } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
 export default function Newpost() {
-  const [imageAsFile, setImageAsFile] = useState("");
+  const [caption, setCaption] = useState("");
+  const [imageAsFile, setImageAsFile] = useState(null);
+
   const handleImageAsFile = (e) => {
     console.log(e);
     const image = e.target.files[0];
     if (image == null) return;
     setImageAsFile(() => image);
   };
-  const submitimagehandler = (e) => {
-    e.preventDefault();
-    console.log("imageasfile is ", imageAsFile);
 
+  const submithandler = async (e) => {
+    e.preventDefault();
+
+    if (imageAsFile == null) return;
     const fileref = ref(storage, `${uuidv4()}-${imageAsFile.name}`);
-    console.log("thisis fileref", fileref);
     const uploadTask = uploadBytesResumable(fileref, imageAsFile);
 
     // Register three observers:
@@ -46,6 +50,10 @@ export default function Newpost() {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
+        if (progress === "100") {
+          setCaption("");
+          setImageAsFile(null);
+        }
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -77,7 +85,12 @@ export default function Newpost() {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
+          addDoc(collection(db, "/posts"), {
+            email: auth.currentUser.email,
+            createdTime: new Date().toUTCString(),
+            caption: caption,
+            url: downloadURL,
+          });
         });
       }
     );
@@ -95,9 +108,10 @@ export default function Newpost() {
         p: 2,
         pt: 4,
         pb: 4,
-        width: 550,
+        width: 400,
         height: "max-content",
         backgroundColor: "#fff",
+        borderRadius: 10,
       }}
     >
       <Avatar sx={{ width: 220, height: 220 }}>LN</Avatar>
@@ -108,16 +122,20 @@ export default function Newpost() {
         multiline
         variant="standard"
         label="Give a great caption !"
-        sx={{ width: 1, m: 1 }}
+        onChange={(e) => {
+          setCaption(e.target.value);
+        }}
+        sx={{ width: 0.9, m: 1 }}
       />
-      <Button variant="contained" size="larger" sx={{ width: 1, m: 1 }}>
-        <input type="file" onChange={handleImageAsFile} />
+      <Button variant="contained" sx={{ width: 0.9, m: 1 }} component="label">
+        <CameraAlt />
+        <input type="file" hidden />
       </Button>
       <Button
         variant="contained"
         size="larger"
-        onClick={submitimagehandler}
-        sx={{ width: 1, m: 1 }}
+        onClick={submithandler}
+        sx={{ width: 0.9, m: 1 }}
       >
         Post
       </Button>
