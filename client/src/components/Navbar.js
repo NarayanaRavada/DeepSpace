@@ -4,7 +4,7 @@ import React from "react";
 
 const Navbar = ({ handleLogout }) => {
   return (
-    <AppBar position="fixed" color="primary" style={{ width: "100%" }}>
+    <AppBar sx={{}}>
       <Toolbar>
         <IconButton size="large" edge="start" sx={{ mr: 2 }}>
           <MenuSharp />
