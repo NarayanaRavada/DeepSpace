@@ -1,17 +1,47 @@
 import Navbar from "./components/Navbar";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Post from "./components/Post";
-import { Box, height } from "@mui/system";
+import { Box } from "@mui/system";
 import Newpost from "./components/NewPost";
+import { db } from "./firebase-config";
+import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Home() {
-  const posts = [1, 2, 3, 4];
-  const pos = {
-    uname: "username",
-    caption:
-      'Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System, being larger than only Mercury. In English, Mars carries the name of the Roman god of war and is often called the "Red Planet"',
-  };
+  const auth = getAuth();
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const docRef = doc(db, "users", auth.currentUser.email);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("user data:", docSnap.data());
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such user!");
+      }
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const q = query(collection(db, "posts"));
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      let temp = [];
+      querySnapshot.forEach((doc) => {
+        temp.push({ ...doc.data(), id: doc.id });
+      });
+      setPosts(temp);
+    });
+    return () => unsub();
+  }, []);
+
+  console.log(posts);
+
   const handleLogout = () => {
     sessionStorage.removeItem("Auth Token");
     navigate("/login");
@@ -35,10 +65,15 @@ export default function Home() {
       }}
     >
       <Navbar handleLogout={handleLogout} />
-      <Box sx={{ display: "flex", height: "90vh", overflowY: "hidden" }}>
-        <Box sx={{ height: "100%", overflowY: "scroll" }}>
-          {posts.map((i) => (
-            <Post key={i} props={pos} />
+      <Box
+        sx={{
+          display: "flex",
+          flexGrow: 1,
+        }}
+      >
+        <Box>
+          {posts.map((post) => (
+            <Post key={post.id} props={post} />
           ))}
         </Box>
         <Newpost />
