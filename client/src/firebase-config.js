@@ -11,7 +11,7 @@ const firebaseConfig = {
   projectId: "gcwebathon",
   storageBucket: "gs://gcwebathon.appspot.com/",
   messagingSenderId: "698463007856",
-  appId: "1:698463007856:web:2fa0a75996d886585c70b5"
+  appId: "1:698463007856:web:2fa0a75996d886585c70b5",
 };
 
 const firebaseApp = initializeApp(firebaseConfig);

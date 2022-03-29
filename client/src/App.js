@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import Form from "./components/Common/Form";
+import Form from "./components/Form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -18,6 +18,7 @@ import {
 } from "firebase/auth";
 import Newpost from "./Newpost";
 import { Button } from "@mui/material";
+import Home from "./Home";
 toast.configure();
 
 function App() {
@@ -93,8 +94,7 @@ function App() {
                 />
               }
             />
-            {/* <Route path="/home" element={<Home />} /> */}
-            <Route path="/newpost" element={<Newpost/>}/>
+            <Route path="/home" element={<Home />} />
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
         </>

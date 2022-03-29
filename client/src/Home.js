@@ -1,16 +1,9 @@
-import Navbar from "./components/Common/Navbar";
+import Navbar from "./components/Navbar";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Post from "./components/Common/Post";
+import Post from "./components/Post";
 import { Box, height } from "@mui/system";
-import {
-  Avatar,
-  Button,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Camera, CameraAlt, CameraFront } from "@mui/icons-material";
+import Newpost from "./components/NewPost";
 
 export default function Home() {
   const posts = [1, 2, 3, 4];
@@ -42,44 +35,13 @@ export default function Home() {
       }}
     >
       <Navbar handleLogout={handleLogout} />
-      <Box sx={{ display: "flex" }}>
-        <Box>
+      <Box sx={{ display: "flex", height: "90vh", overflowY: "hidden" }}>
+        <Box sx={{ height: "100%", overflowY: "scroll" }}>
           {posts.map((i) => (
             <Post key={i} props={pos} />
           ))}
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            mt: 20,
-            p: 2,
-            pt: 4,
-            pb: 4,
-            width: 550,
-            height: "max-content",
-            backgroundColor: "#eee",
-          }}
-        >
-          <Avatar sx={{ width: 220, height: 220 }}>LN</Avatar>
-          <Typography variant="h5" sx={{ mt: 4 }}>
-            username
-          </Typography>
-          <TextField
-            multiline
-            variant="standard"
-            label="Give a great caption !"
-            sx={{ width: 1, m: 1 }}
-          />
-          <Button variant="contained" size="large" sx={{ width: 1, m: 1 }}>
-            <CameraAlt />
-          </Button>
-          <Button variant="contained" size="large" sx={{ width: 1, m: 1 }}>
-            Post
-          </Button>
-        </Box>
+        <Newpost />
       </Box>
     </Box>
   );
