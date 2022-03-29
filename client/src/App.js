@@ -25,7 +25,13 @@ toast.configure();
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [userdetails,setUserdetails]=useState({
+    username :" ",
+    profilepicURL:" ",
+    fullname:" ",
+    postscreated:[],
+    postsliked:[],
+  });
   const navigate = useNavigate();
   const handleAction = async (id) => {
     const authentication = getAuth();
@@ -54,11 +60,7 @@ function App() {
             response._tokenResponse.refreshToken
           );
           try {
-            await setDoc(doc(db, "users",email), {
-              username: username,
-              email: email,
-              Date: new Date(),
-            },{merge: true});
+            await setDoc(doc(db, "users",email),userdetails,{merge: true});
           } catch (e) {
             console.error("Error adding newprofile data", e);
           }
@@ -71,6 +73,14 @@ function App() {
         });
     }
   };
+  const onUserdetailchange = (newusername,id) => {
+    setUserdetails((olduserdetails)=>{
+      return {
+        ...olduserdetails,
+        id:newusername,
+      }
+    });
+  }
   // useEffect(() => {
   //   let authToken = sessionStorage.getItem("Auth Token");
 
@@ -101,7 +111,7 @@ function App() {
                   title="Register"
                   setEmail={setEmail}
                   setPassword={setPassword}
-                  setUsername={setUsername}
+                  setUserdetail={onUserdetailchange}
                   handleAction={() => handleAction(2)}
                 />
               }

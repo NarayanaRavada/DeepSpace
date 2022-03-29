@@ -7,24 +7,33 @@ import Newpost from "./components/NewPost";
 import { db } from "./firebase-config";
 import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
-export default function Home() {
+export const userContext = React.createContext(null);
+const Home = () => {
   const auth = getAuth();
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const docRef = doc(db, "users", auth.currentUser.email);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log("user data:", docSnap.data());
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such user!");
-      }
-    } else {
-      // User is signed out
-      // ...
-    }
+  const [userdetails, setUserdetails] = useState({
+    username: " ",
+    profilepicURL: " ",
+    fullname: " ",
+    postscreated: [],
+    postsliked: [],
   });
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("fromhome auth", auth);
+        console.log(auth.currentUser.email);
+        const docRef = doc(db, "users", auth.currentUser.email);
+        getDoc(docRef).then((docSnap) => {
+          console.log("this is the doc", docSnap.data());
+          setUserdetails(docSnap.data());
+        });
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+  }, [auth]);
 
   const [posts, setPosts] = useState([]);
 
@@ -40,44 +49,48 @@ export default function Home() {
     return () => unsub();
   }, []);
 
-  console.log(posts);
-
-  const handleLogout = () => {
-    sessionStorage.removeItem("Auth Token");
-    navigate("/login");
-  };
   let navigate = useNavigate();
-  useEffect(() => {
-    let authToken = sessionStorage.getItem("Auth Token");
-    if (authToken) {
-      navigate("/home");
+  const toggleLoginout = () => {
+    if(userdetails){
+      sessionStorage.removeItem("Auth Token");
+      setUserdetails(null);
     }
-    if (!authToken) {
+    else {
       navigate("/login");
     }
-  }, []);
+  };
+  // useEffect(() => {
+  //   let authToken = sessionStorage.getItem("Auth Token");
+  //   if (!authToken) {
+  //     navigate("/login");
+  //   }
+  // }, []);
   return (
-    <Box
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        width: "70vw",
-      }}
-    >
-      <Navbar handleLogout={handleLogout} />
+    <userContext.Provider value={userdetails}>
       <Box
-        sx={{
+        style={{
           display: "flex",
-          flexGrow: 1,
+          justifyContent: "space-between",
+          width: "70vw",
         }}
       >
-        <Box>
-          {posts.map((post) => (
-            <Post key={post.id} props={post} />
-          ))}
+        <Navbar toggleLoginout={toggleLoginout} />
+        <Box
+          sx={{
+            display: "flex",
+            flexGrow: 1,
+          }}
+        >
+          <Box>
+            {posts.map((post) => (
+              <Post key={post.id} props={post} />
+            ))}
+          </Box>
+          <Newpost />
         </Box>
-        <Newpost />
       </Box>
-    </Box>
+    </userContext.Provider>
   );
-}
+};
+
+export default Home;

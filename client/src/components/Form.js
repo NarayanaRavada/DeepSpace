@@ -4,7 +4,7 @@ import Button from "./Button";
 export default function BasicTextFields({
   title,
   setPassword,
-  setUsername,
+  setUserdetail,
   setEmail,
   handleAction,
 }) {
@@ -35,13 +35,21 @@ export default function BasicTextFields({
         onChange={(e) => setPassword(e.target.value)}
       />
       {title == "Register" && (
+        <React.Fragment>
           <TextField
             id="username"
             label="Username"
             variant="outlined"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setUserdetail(e.target.value, e.target.id)}
           />
-        )}
+          <TextField
+            id="fullname"
+            label="Full Name"
+            variant="outlined"
+            onChange={(e) => setUserdetail(e.target.value, e.target.id)}
+          />
+        </React.Fragment>
+      )}
 
       <Button title={title} handleAction={handleAction} />
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { auth, storage, db } from "../firebase-config";
+import { storage, db } from "../firebase-config";
 import {
   Avatar,
   Box,
@@ -19,8 +19,10 @@ import {
 } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
+import { getAuth } from "firebase/auth";
 
 export default function Newpost() {
+  const auth=getAuth();
   const [caption, setCaption] = useState("");
   const [imageAsFile, setImageAsFile] = useState(null);
 

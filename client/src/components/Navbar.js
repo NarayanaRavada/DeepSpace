@@ -1,17 +1,18 @@
 import { MenuSharp } from "@mui/icons-material";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import Profile from "../Profile";
-
-const Navbar = ({ handleLogout }) => {
+import { userContext } from "../Home";
+const Navbar = ({ toggleLoginout }) => {
+  const userdetails = useContext(userContext);
   return (
     <AppBar>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{}}>
           Deep Space
         </Typography>
-        <Button variant="contained" onClick={handleLogout}>
-          Log out
+        <Button variant="contained" onClick={toggleLoginout}>
+          {userdetails && "Log out" || "Log in"}
         </Button>
       </Toolbar>
     </AppBar>
