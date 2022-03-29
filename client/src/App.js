@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import Form from "./components/common/Form";
+import Form from "./components/Common/Form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -30,11 +30,11 @@ function App() {
     if (id === 1) {
       signInWithEmailAndPassword(authentication, email, password)
         .then((response) => {
-          navigate("/home");
           sessionStorage.setItem(
             "Auth Token",
             response._tokenResponse.refreshToken
-          );
+            );
+            navigate("/home");
         })
         .catch((error) => {
           if (error.code === "auth/wrong-password") {
@@ -47,11 +47,11 @@ function App() {
     } else if (id === 2) {
       createUserWithEmailAndPassword(authentication, email, password)
         .then((response) => {
-          navigate("/home");
           sessionStorage.setItem(
             "Auth Token",
             response._tokenResponse.refreshToken
-          );
+            );
+            navigate("/home");
         })
         .catch((error) => {
           if (error.code === "auth/email-already-in-use") {

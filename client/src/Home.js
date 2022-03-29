@@ -1,7 +1,7 @@
-import Navbar from "./components/common/Navbar";
+import Navbar from "./components/Common/Navbar";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Post from "./components/common/Post";
+import Post from "./components/Common/Post";
 import { Box, height } from "@mui/system";
 import {
   Avatar,
@@ -73,10 +73,10 @@ export default function Home() {
             label="Give a great caption !"
             sx={{ width: 1, m: 1 }}
           />
-          <Button variant="contained" larger sx={{ width: 1, m: 1 }}>
+          <Button variant="contained" size="large" sx={{ width: 1, m: 1 }}>
             <CameraAlt />
           </Button>
-          <Button variant="contained" larger sx={{ width: 1, m: 1 }}>
+          <Button variant="contained" size="large" sx={{ width: 1, m: 1 }}>
             Post
           </Button>
         </Box>
