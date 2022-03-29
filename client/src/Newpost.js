@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { storage } from "../src/firebase-config";
+import { storage } from "./firebase-config";
 import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
-export default function Home() {
+export default function Newpost() {
   const handleLogout = () => {
     sessionStorage.removeItem("Auth Token");
     navigate("/login");
@@ -17,8 +17,7 @@ export default function Home() {
     if (!authToken) {
       navigate("/login");
     }
-  }, []);
-  const allInputs = { imgUrl: "" };
+  }, []); 
   const [imageAsFile, setImageAsFile] = useState("");
   const handleImageAsFile = (e) => {
     console.log(e);
