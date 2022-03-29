@@ -6,20 +6,15 @@ import { Box } from "@mui/system";
 import Newpost from "./components/NewPost";
 import { db } from "./firebase-config";
 import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-export const userContext = React.createContext(null);
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
 const Home = () => {
   const auth = getAuth();
-  const [userdetails, setUserdetails] = useState({
-    username: " ",
-    profilepicURL: " ",
-    fullname: " ",
-    postscreated: [],
-    postsliked: [],
-  });
+  const [userdetails, setUserdetails] = useState(null);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
+      console.log("fron onauthstate",user);
       if (user) {
         console.log("fromhome auth", auth);
         console.log(auth.currentUser.email);
@@ -29,8 +24,15 @@ const Home = () => {
           setUserdetails(docSnap.data());
         });
       } else {
-        // User is signed out
-        // ...
+        signOut(auth)
+          .then(() => {
+            // Sign-out successful.
+          })
+          .catch((error) => {
+            // An error happened.
+          });
+
+        setUserdetails(null);
       }
     });
   }, [auth]);
@@ -51,9 +53,13 @@ const Home = () => {
 
   let navigate = useNavigate();
   const toggleLoginout = () => {
+    console.log("sigining out", userdetails);
     if (userdetails) {
       sessionStorage.removeItem("Auth Token");
       setUserdetails(null);
+      signOut(auth)
+        .then(() => {console.log("now newuser",userdetails);})
+        .catch((error) => {});
     } else {
       navigate("/login");
     }
@@ -65,32 +71,30 @@ const Home = () => {
   //   }
   // }, []);
   return (
-    <userContext.Provider value={userdetails}>
+    <Box
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        width: "70vw",
+      }}
+    >
+      <Navbar toggleLoginout={toggleLoginout} userdetails={userdetails} />
       <Box
-        style={{
+        sx={{
+          positon: "relative",
           display: "flex",
-          justifyContent: "space-between",
-          width: "70vw",
+          flexGrow: 1,
+          mt: 4,
         }}
       >
-        <Navbar toggleLoginout={toggleLoginout} />
-        <Box
-          sx={{
-            positon: "relative",
-            display: "flex",
-            flexGrow: 1,
-            mt: 4,
-          }}
-        >
-          <Box>
-            {posts.map((post) => (
-              <Post key={post.id} props={post} />
-            ))}
-          </Box>
-          <Newpost />
+        <Box>
+          {posts.map((post) => (
+            <Post key={post.id} props={post} />
+          ))}
         </Box>
+        {userdetails && <Newpost />}
       </Box>
-    </userContext.Provider>
+    </Box>
   );
 };
 

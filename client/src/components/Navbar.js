@@ -1,8 +1,7 @@
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import React, { useContext } from "react";
-import { userContext } from "../Home";
-const Navbar = ({ toggleLoginout }) => {
-  const userdetails = useContext(userContext);
+
+const Navbar = ({ toggleLoginout , userdetails }) => {
   return (
     <AppBar>
       <Toolbar sx={{ d: "flex", justifyContent: "space-between" }}>
@@ -10,7 +9,7 @@ const Navbar = ({ toggleLoginout }) => {
           Deep Space
         </Typography>
         <Button variant="contained" onClick={toggleLoginout}>
-          {(userdetails && "Log in") || "Log out"}
+          {(userdetails && "Log out") || "Log in"}
         </Button>
       </Toolbar>
     </AppBar>

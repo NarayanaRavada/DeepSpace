@@ -20,10 +20,8 @@ import {
 import { addDoc, collection } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { getAuth } from "firebase/auth";
-import { userContext } from "../Home";
 
 export default function Newpost() {
-  const userdetails = useContext(userContext);
   const auth = getAuth();
   const [caption, setCaption] = useState("");
   const [imageAsFile, setImageAsFile] = useState(null);
