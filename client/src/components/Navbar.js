@@ -10,7 +10,7 @@ const Navbar = ({ toggleLoginout }) => {
           Deep Space
         </Typography>
         <Button variant="contained" onClick={toggleLoginout}>
-          {(userdetails && "Log in") || "Log out"}
+          {(userdetails && "Log Out") || "Log In"}
         </Button>
       </Toolbar>
     </AppBar>
