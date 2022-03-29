@@ -51,11 +51,10 @@ const Home = () => {
 
   let navigate = useNavigate();
   const toggleLoginout = () => {
-    if(userdetails){
+    if (userdetails) {
       sessionStorage.removeItem("Auth Token");
       setUserdetails(null);
-    }
-    else {
+    } else {
       navigate("/login");
     }
   };
@@ -77,8 +76,10 @@ const Home = () => {
         <Navbar toggleLoginout={toggleLoginout} />
         <Box
           sx={{
+            positon: "relative",
             display: "flex",
             flexGrow: 1,
+            mt: 4,
           }}
         >
           <Box>

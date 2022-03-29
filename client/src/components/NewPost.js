@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { storage, db } from "../firebase-config";
 import {
   Avatar,
@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { CameraAlt } from "@mui/icons-material";
+import { AddAPhoto, CameraAlt } from "@mui/icons-material";
 import {
   getDownloadURL,
   getStorage,
@@ -20,16 +20,17 @@ import {
 import { addDoc, collection } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { getAuth } from "firebase/auth";
+import { userContext } from "../Home";
 
 export default function Newpost() {
-  const auth=getAuth();
+  const userdetails = useContext(userContext);
+  const auth = getAuth();
   const [caption, setCaption] = useState("");
   const [imageAsFile, setImageAsFile] = useState(null);
 
   const handleImageAsFile = (e) => {
     console.log(e);
     const image = e.target.files[0];
-    if (image == null) return;
     setImageAsFile(() => image);
   };
 
@@ -40,15 +41,9 @@ export default function Newpost() {
     const fileref = ref(storage, `${uuidv4()}-${imageAsFile.name}`);
     const uploadTask = uploadBytesResumable(fileref, imageAsFile);
 
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
@@ -84,8 +79,6 @@ export default function Newpost() {
         }
       },
       () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           addDoc(collection(db, "/posts"), {
             email: auth.currentUser.email,
@@ -101,25 +94,29 @@ export default function Newpost() {
   return (
     <Box
       sx={{
+        position: "fixed",
+        right: 200,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        m: 5,
         mt: 20,
         p: 2,
-        pt: 4,
-        pb: 4,
-        width: 400,
+        width: 300,
         height: "max-content",
         backgroundColor: "#fff",
-        borderRadius: 10,
+        borderRadius: 1,
       }}
     >
-      <Avatar sx={{ width: 220, height: 220 }}>LN</Avatar>
-      <Typography variant="h5" sx={{ mt: 4 }}>
-        username
-      </Typography>
+      <h3>Drop a post</h3>
+      <Button
+        variant="outlined"
+        sx={{ width: 250, height: 250, m: 1 }}
+        component="label"
+      >
+        <AddAPhoto />
+        <input type="file" onChange={handleImageAsFile} hidden />
+      </Button>
       <TextField
         multiline
         variant="standard"
@@ -129,10 +126,6 @@ export default function Newpost() {
         }}
         sx={{ width: 0.9, m: 1 }}
       />
-      <Button variant="contained" sx={{ width: 0.9, m: 1 }} component="label">
-        <CameraAlt />
-        <input type="file" hidden />
-      </Button>
       <Button
         variant="contained"
         size="larger"

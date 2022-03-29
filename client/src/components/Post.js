@@ -14,17 +14,16 @@ const Post = ({ props }) => {
   const img =
     "https://images.unsplash.com/photo-1612151855475-877969f4a6cc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGQlMjBpbWFnZXxlbnwwfHwwfHw%3D&w=1000&q=80";
   const boxStyle = {
-    width: "min(95vw, 800px)",
+    width: 700,
     textAlign: "left",
     m: 7,
     ml: 0,
-    borderRadius: 10,
+    borderRadius: 1,
   };
 
   return (
     <Card sx={boxStyle}>
       <CardHeader
-        sx={{ p: 3 }}
         avatar={<Avatar src={img} />}
         title={props.uname}
         subheader={props.createdTime}
@@ -40,8 +39,8 @@ const Post = ({ props }) => {
           background: `url(${props.url})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          width: 800,
-          height: 450,
+          width: 700,
+          height: 350,
         }}
       ></div>
 
