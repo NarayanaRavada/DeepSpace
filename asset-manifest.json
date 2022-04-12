@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/GCWebathon/static/css/main.415f99d4.css",
+    "main.js": "/GCWebathon/static/js/main.da2e3313.js",
+    "index.html": "/GCWebathon/index.html",
+    "main.415f99d4.css.map": "/GCWebathon/static/css/main.415f99d4.css.map",
+    "main.da2e3313.js.map": "/GCWebathon/static/js/main.da2e3313.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.415f99d4.css",
+    "static/js/main.da2e3313.js"
+  ]
+}
