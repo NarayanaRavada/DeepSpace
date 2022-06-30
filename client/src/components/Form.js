@@ -1,7 +1,7 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import Button from "./Button";
-import { Link } from "react-router-dom";
+import * as React from "react"
+import TextField from "@mui/material/TextField"
+import Button from "./Button"
+import { Link } from "react-router-dom"
 export default function BasicTextFields({
   title,
   setPassword,
@@ -14,11 +14,14 @@ export default function BasicTextFields({
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "space-around",
         alignItems: "center",
         padding: 10,
+        width: 350,
+        margin: "auto",
         backgroundColor: "#fff",
         marginTop: 20,
+        borderRadius: 4,
       }}
     >
       <div className="heading-container">
@@ -31,14 +34,14 @@ export default function BasicTextFields({
             label="Username"
             variant="outlined"
             onChange={(e) => setUserdetail(e.target.value, e.target.id)}
-            sx={{ m: 1 }}
+            sx={{ m: 2 }}
           />
           <TextField
             id="fullname"
             label="Full Name"
             variant="outlined"
             onChange={(e) => setUserdetail(e.target.value, e.target.id)}
-            sx={{ m: 1 }}
+            sx={{ m: 2 }}
           />
         </React.Fragment>
       )}
@@ -47,7 +50,7 @@ export default function BasicTextFields({
         label="Email"
         variant="outlined"
         onChange={(e) => setEmail(e.target.value)}
-        sx={{ m: 1 }}
+        sx={{ m: 2 }}
       />
       <TextField
         id="password"
@@ -55,15 +58,15 @@ export default function BasicTextFields({
         variant="outlined"
         type="password"
         onChange={(e) => setPassword(e.target.value)}
-        sx={{ m: 1 }}
+        sx={{ m: 2 }}
       />
-      <Button title={title} handleAction={handleAction} />
+      <Button title={title} handleAction={handleAction} sx={{  m: 2, mb: 4, width: 1 }} />
       {title === "Register" && (
-        <Link to="/login">Already have Account? Login!</Link>
+        <Link sx={{m: 2}} to="/DeepSpace/login">Already have Account? Login!</Link>
       )}
       {title === "Login" && (
-        <Link to="/register">No Account? Create Account!</Link>
+        <Link to="/DeepSpace/register">No Account? Create Account!</Link>
       )}
     </div>
-  );
+  )
 }

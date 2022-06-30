@@ -1,4 +1,9 @@
-import { BookmarkBorder, Comment, Favorite } from "@mui/icons-material";
+import {
+  BookmarkBorder,
+  Calculate,
+  Comment,
+  Favorite,
+} from "@mui/icons-material"
 import {
   Avatar,
   Card,
@@ -7,24 +12,26 @@ import {
   CardHeader,
   IconButton,
   Typography,
-} from "@mui/material";
-import React from "react";
+} from "@mui/material"
+import React from "react"
 
 const Post = ({ props }) => {
-  const img =
-    "https://images.unsplash.com/photo-1612151855475-877969f4a6cc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGQlMjBpbWFnZXxlbnwwfHwwfHw%3D&w=1000&q=80";
+  // const img =
+  // "https://images.unsplash.com/photo-1612151855475-877969f4a6cc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGQlMjBpbWFnZXxlbnwwfHwwfHw%3D&w=1000&q=80";
   const boxStyle = {
-    width: 700,
+    width: "90%",
     textAlign: "left",
-    m: 7,
+    m: 5,
     ml: 0,
+    mr: 0,
     borderRadius: 1,
-  };
+    maxWidth: 700,
+  }
 
   return (
     <Card sx={boxStyle}>
       <CardHeader
-        avatar={<Avatar src={img} />}
+        avatar={<Avatar />}
         title={props.uname}
         subheader={props.createdTime}
         action={
@@ -39,8 +46,7 @@ const Post = ({ props }) => {
           background: `url(${props.url})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          width: 700,
-          height: 350,
+          height: 300,
         }}
       ></div>
 
@@ -59,7 +65,7 @@ const Post = ({ props }) => {
         </Typography>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default Post;
+export default Post
